@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "454095189009",
+    "project_id": "melanomameasurement",
+    "storage_bucket": "melanomameasurement.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454095189009:android:2abcfcb04a9ee1ef236db0",
+        "android_client_info": {
+          "package_name": "mel_mes.diag"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454095189009-o8eio2378iah24ctfva4mvlihnvnli61.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mel_mes.diag",
+            "certificate_hash": "e89c87c67091e53bfea3dd1dfda7ea47d283153e"
+          }
+        },
+        {
+          "client_id": "454095189009-7or6d028pomb896ubh5qv08sp4hocdta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwdQs2MjDQUgnCIBmd8h8QFumRDA7Ki0o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454095189009-7or6d028pomb896ubh5qv08sp4hocdta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "454095189009-k8s9meathsteavl4avdlaa97npkmbsnd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "melmes"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

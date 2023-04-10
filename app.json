@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "frank",
+    "slug": "frank",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pizzapops.frank"
+    },
+    "android": {
+      "adaptiveIcon": {
+        //"foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage":"./assets/anImageThatDoesNotExist.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.pizzapops.frank"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d0f52cf6-cd2e-4ff4-8b5f-7486bf7ef1d6"
+      }
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "13.0"
+          }
+        }
+      ]
+    ]
+  }
+}

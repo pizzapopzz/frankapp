@@ -1,0 +1,480 @@
+import * as React from 'react';
+import { StatusBar } from "expo-status-bar";
+import { Dimensions, Button, StyleSheet, Text, View, Image, ImageBackground, SafeAreaView, FlatList, Fragment } from "react-native";
+import Button2 from "./components/Button2"
+import ImageViewer from "./components/ImageViewer";
+import * as ImagePicker from 'expo-image-picker';
+import { useState, useEffect } from 'react';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useFonts } from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
+import { useCallback } from 'react';
+import { Camera, CameraType } from 'expo-camera';
+import { Card } from "react-native-paper";
+import { Ionicons } from "@expo/vector-icons";
+import Pyodide from './components/pyodide';
+import * as tf from '@tensorflow/tfjs'
+
+
+import Data from "./components/Data"
+// import * as tf from '@tensorflow/tfjs'
+// import { bundleResourceIO, decodeJpeg } from '@tensorflow/tfjs-react-native'
+// yarn add react-native-safe-area-context
+// yarn add react-native-screens
+// yarn add react-native-svg
+//npx expo install react-native-svg
+import * as FileSystem from 'expo-file-system';
+
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
+
+SplashScreen.preventAutoHideAsync();
+
+const Stack = createNativeStackNavigator();
+const bim = require("./assets/images/lightback.png");
+const logo = require("./assets/images/newlogo2.png");
+const prf = require("./assets/icons/2.png");
+const cmr = require("./assets/icons/1.png");
+const msr = require("./assets/icons/3.png");
+const boxb = require("./assets/icons/box.png");
+const PlaceholderImage = require("./assets/images/placeholder.png");
+const mela = require("./assets/images/ISIC_9974166.jpg");
+
+const script = fetch("./components/main.py");
+
+
+// command to run app: npx expo start --tunnel
+// website tutorial: https://docs.expo.dev/tutorial/build-a-screen/
+// Get reference to bundled model assets 
+const modelJson = require('./assets/deep/model.json');
+
+const runScript = async (code) => {
+  const pyodide = await window.loadPyodide({
+    indexURL : "https://cdn.jsdelivr.net/pyodide/v0.18.1/full/"
+  });
+
+  return await pyodide.runPythonAsync(code);
+}
+
+const Tens = ({ navigation }) => {
+  const [output, setOutput] = useState("(loading...)");
+
+  useEffect(() => {
+    const run = async () => {
+      const scriptText = await (await fetch(script)).text();
+      const out = await runScript(scriptText);
+      setOutput(out);
+    }
+    run();
+
+  }, []);
+
+  return (
+      <View>
+        <Text>
+          5 + 7 = {output}
+        </Text>
+      </View>
+  );
+
+}
+
+const HomeScreen = ({ navigation }) => {
+
+  const [fontsLoaded] = useFonts({
+    // 'Jumper': require('./assets/fonts/jumper/Jumper.ttf'),
+    'JumperBI': require('./assets/fonts/jumper/JumperPERSONALUSEONLY-BlackItalic.ttf'),
+    'cvI': require('./assets/fonts/coolvetica/coolveticarg.otf'),
+    'cvIL': require('./assets/fonts/coolvetica/CoolveticaLt-Regular.ttf'),
+
+
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={bim} style={styles.image}>
+        <View style={styles.Titles} onLayout={onLayoutRootView}>
+          <Image source={logo} style={{ height: 290, width: 290, alignSelf: 'center', padding: -1 }} />
+          <View style={styles.containerb}>
+            <View style={styles.containerBox}>
+            <Button2 theme="secondary" label="python"
+                onPress={() =>
+                  navigation.navigate('Tens')
+                }
+              />
+              <Button2 theme="secondary" label="PROFILE"
+                onPress={() =>
+                  navigation.navigate('Profile', { name: 'Jane' })
+                }
+                icon={prf}
+                description="See past records"
+              />
+              <Button2 theme="secondary" label="DIAGNOSTIC TOOL"
+                onPress={() =>
+                  navigation.navigate('Instructions',)
+                }
+                icon={cmr}
+                description="Scan a Photo of your lesion"
+              />
+
+              <Button2 theme="secondary" label="MEASUREMENTS"
+                onPress={() =>
+                  navigation.navigate('Measurements',)
+                }
+                icon={msr}
+                description="See device measurement results"
+              />
+            </View>
+          </View>
+        </View>
+        <View>
+          <Text>{'\n\n\n\n\n\n\n\n\n\n\n\n'}</Text>
+        </View>
+      </ImageBackground>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+
+const UpIm = ({ navigation }) => {
+
+  const [fontsLoaded] = useFonts({
+    // 'Jumper': require('./assets/fonts/jumper/Jumper.ttf'),
+    'JumperBI': require('./assets/fonts/jumper/JumperPERSONALUSEONLY-BlackItalic.ttf'),
+    'cvI': require('./assets/fonts/coolvetica/coolveticarg.otf'),
+
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={bim} style={styles.image}>
+        <View style={styles.Titles} onLayout={onLayoutRootView}>
+          <View style={styles.containerb}>
+            <Text>{'\n\n'}</Text>
+            <View style={styles.containerBox}>
+              <Text style={{ fontFamily: 'cvI', fontSize: 50, color: '#1F1458', textAlign: 'center', lineHeight: 0.1, paddingTop: 50, paddingLeft: 35, textDecorationLine: 'underline' }}> Instructions</Text>
+              <SafeAreaView style={{ flex: 1 }}>
+                <View style={{ padding: 20, alignItems: 'flex-start', }}>
+                  <FlatList
+                    data={[
+                      { key: 'Make sure image is centered' },
+                      { key: 'Please shave area of any hair before taking the photo' },
+                      { key: 'Try to take image on plain background' },
+                      { key: 'If the lesion is in a hard to reach area, please ask someone to take the photo for you' },
+                      { key: 'Ensure the room is well lit' },
+                      { key: 'Please retake the picture if it is blurry or contains motion artifacts' },
+                    ]}
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{ marginBottom: 10 }}>
+                          <Text style={{ fontSize: 17, paddingLeft: 20 }}>{`\u2022 ${item.key}`}</Text>
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+              </SafeAreaView>
+              <Button2 theme="secondary" label="Continue"
+                onPress={() =>
+                  navigation.navigate('MDR',)
+                }
+                icon={cmr}
+                description="Proceed to Diagnostic Tool"
+              />
+            </View>
+          </View>
+        </View>
+        <View>
+          <Text>{'\n\n\n\n\n\n\n\n\n\n\n\n'}</Text>
+        </View>
+      </ImageBackground>
+      <StatusBar style="auto" />
+    </View>
+  )
+};
+const Msrr = ({ navigation }) => {
+  const [fontsLoaded] = useFonts({
+    // 'Jumper': require('./assets/fonts/jumper/Jumper.ttf'),
+    'JumperBI': require('./assets/fonts/jumper/JumperPERSONALUSEONLY-BlackItalic.ttf'),
+    'cvI': require('./assets/fonts/coolvetica/coolveticarg.otf'),
+
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground source={bim} style={styles.image}>
+        <View style={styles.Titles} onLayout={onLayoutRootView}>
+          <Text style={{ fontFamily: 'cvI', fontSize: 50, color: '#1F1458', textAlign: 'center', lineHeight: 0.1, paddingTop: 60, }}>Results</Text>
+          <Data />
+          <Text>{'\n\n'}</Text>
+        </View>
+      </ImageBackground >
+      <StatusBar style="auto" />
+    </View >
+  )
+};
+
+const ProfileScreen = ({ navigation, route }) => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>This is {route.params.name}'s profile</Text>
+      <Button
+        style={{ color: 'white' }}
+        title="Go to Details... again"
+        onPress={() => navigation.push('Details')}
+      />
+      <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+    </View>
+  )
+
+};
+
+const MDR = ({ navigation, route }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const [fontsLoaded] = useFonts({
+    'cvI': require('./assets/fonts/coolvetica/coolveticarg.otf'),
+    'cvIL': require('./assets/fonts/coolvetica/CoolveticaLt-Regular.ttf'),
+  });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
+
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    } else {
+      alert('You did not select any image.');
+    }
+  };
+  return (
+    <View style={styles.containerfil}>
+      <View style={styles.Titles} onLayout={onLayoutRootView}>
+        <Text style={{ fontFamily: 'cvI', fontSize: 50, color: '#1F1458', textAlign: 'center', paddingTop: 0 }}>{'\n\n'}Upload Image</Text>
+        <Text style={{ fontFamily: 'cvIL', fontSize: 25, color: '#1F1458', textAlign: 'center' }}> *Remember this tool is only for self monitoring and does not serve as a substitite for medical care</Text>
+      </View>
+      <View style={styles.centered} onLayout={onLayoutRootView}>
+        <ImageViewer
+          placeholderImageSource={PlaceholderImage}
+          selectedImage={selectedImage}
+        />
+      </View>
+      <View style={styles.footerContainer}>
+        <Button2 theme="secondary" label="Proceed With Image"
+          onPress={() =>
+            navigation.navigate('Tens',)
+          }
+          description="Proceed to Diagnostic Tool"
+        />
+        <Button2 theme="primary" label="Upload Photo" onPress={pickImageAsync} />
+        <Text style={{ lineHeight: 0.1 }}>{'\n'}</Text>
+        <Button2 theme="primary" label="Take Photo"
+          onPress={() =>
+            navigation.navigate('TakePhoto',)
+          } />
+        <Text>{'\n\n\n\n\n\n\n\n'}</Text>
+      </View>
+      <StatusBar style="auto" />
+    </View>
+  );
+}
+
+
+const CamApp = ({ navigation }) => {
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
+  const [image, setImage] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  useEffect(() => {
+    (async () => {
+      const cameraStatus = await Camera.requestCameraPermissions();
+      setHasCameraPermission(cameraStatus.status === 'granted');
+    })();
+  }, []);
+  const takePicture = async () => {
+    if (camera) {
+      const data = await camera.takePictureAsync(null)
+      setImage(data.uri);
+    }
+  }
+
+  if (hasCameraPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={styles.cameraContainer}>
+        <Camera
+          ref={ref => setCamera(ref)}
+          style={styles.fixedRatio}
+          type={type}
+          ratio={'1:1'} />
+      </View>
+      <Button
+        title="Flip Image"
+        onPress={() => {
+          setType(
+            type === Camera.Constants.Type.back
+              ? Camera.Constants.Type.front
+              : Camera.Constants.Type.back
+          );
+        }}>
+      </Button>
+      <Button title="Take Picture" onPress={() => takePicture()} />
+      {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
+    </View>
+  );
+}
+
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Welcome' }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+        <Stack.Screen name="MDR" component={MDR} options={{ title: 'Diagnostic Tool' }} />
+        <Stack.Screen name="Instructions" component={UpIm} options={{ title: 'Instructions' }} />
+        <Stack.Screen name="Measurements" component={Msrr} options={{ title: 'Measurements' }} />
+        <Stack.Screen name="TakePhoto" component={CamApp} options={{ title: 'Take Photo' }} />
+        <Stack.Screen name="Tens" component={Tens} options={{ title: 'Deep Learning' }} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  containerfil: {
+    flex: 1,
+    backgroundColor: '#E0E5FF'
+  },
+  containerb: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  containerBox: {
+    flex: 1,
+    flexDirection: "column",
+    borderRadius: 20,
+    width: '80%',
+    height: '100%',
+    alignItems: 'flex-start',
+    // justifyContent: 'flex-start',
+    // justifyContent: 'center',
+    // flexDirection: 'row',
+    backgroundColor: 'rgba(244,245,255,0.8)'
+    //'#F4F5FF',
+    //'rgba(31,20,88,0.7)',
+    //#1F1458',
+    // alignContent: 'center',
+  },
+  containerBox2: {
+    flex: 1,
+    flexDirection: "column",
+    borderRadius: 20,
+    width: '80%',
+    height: '100%',
+    alignItems: 'center',
+    // justifyContent: 'flex-start',
+    // justifyContent: 'center',
+    // flexDirection: 'row',
+    backgroundColor: 'rgba(244,245,255,0.8)'
+    //'#F4F5FF',
+    //'rgba(31,20,88,0.7)',
+    //#1F1458',
+    // alignContent: 'center',
+  },
+  Titles: {
+    flex: 1,
+    flexDirection: "column",
+    PaddingTop: 100,
+    paddingHorizontal: 10,
+  },
+  centered: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  image2: {
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  text: {
+    color: "#FFDE59",
+    fontFamily: 'Jumper',
+    fontSize: 42,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  footerContainer: {
+    flex: 1 / 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 1
+  },
+});

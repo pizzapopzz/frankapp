@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-frank-dev-164002-authRole",
+      "UnauthRoleArn": "arn:aws:iam::711898080082:role/amplify-frank-dev-164002-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::711898080082:role/amplify-frank-dev-164002-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-frank-dev-164002-deployment",
+      "UnauthRoleName": "amplify-frank-dev-164002-unauthRole",
+      "StackName": "amplify-frank-dev-164002",
+      "StackId": "arn:aws:cloudformation:us-east-2:711898080082:stack/amplify-frank-dev-164002/0bd14e80-cf3b-11ed-81c7-0a6f34c54988",
+      "AmplifyAppId": "d3ia23ip0t53nr"
+    },
+    "categories": {
+      "auth": {
+        "frank3787a847": {}
+      },
+      "storage": {
+        "mELLER": {}
+      }
+    }
+  }
+}
